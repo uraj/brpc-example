@@ -1,0 +1,34 @@
+syntax="proto2";
+
+option cc_generic_services = true;
+
+message CompileRequest {
+    enum Transformation {
+        SUBINST = 0;
+        BCF = 1;
+        FLA = 2;
+        GI = 3;
+        ZS = 4;
+        FEPI = 5;
+    };
+
+    repeated Transformation trans = 1;
+    required bytes ir = 2;
+};
+
+message CompileResponse {
+    enum ErrorCode {
+        UnknownError = 0;
+        BadRequest = 1;
+        IRParseError = 2;
+        TransformationError = 3;
+        Success = 4;
+    };
+    required ErrorCode code = 1;
+    optional bytes ir = 2;
+};
+
+service CompileService {
+    rpc compile(CompileRequest) returns (CompileResponse) {};
+};
+
